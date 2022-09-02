@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block con %}
+
+    <h1><b>게시글수정</b></h1>
+
+    <form method="post" name ='updateForm'>
+        {% csrf_token %}
+        <div class="mb-3 mt-5">
+            <label class="form-label"><b>SUBJECT</b></label>
+            <input type="text" name = 'nsub' value="{{b.subject}}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label class="form-label"><b>WRITER</b></label>
+            <input type="text" class="form-control" disabled value="{{ b.writer }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label"><b>CONTENT</b></label>
+            <textarea  class="form-control" name = 'ncon' style="height: 150px;">{{b.content}}'</textarea>
+        </div>
+        <div class="text-end mt-3">
+            <button type = "button" onclick ="check()" class="btn btn-dark">수정</button>
+            <a href = "{% url 'board:detail' b.id %}" class = 'btn btn-danger'>취소</a>
+        </div> 
+    </form> 
+
+    <script>
+        function check(){
+            uf = document.updateForm;
+            if(!uf.nsub.value){
+                alert('제목을 입력해주세요');
+            }else if(uf.ncon.value.length < 10){
+                alert('10글자 이상 입력해주세요');
+            }else{
+                uf.submit();
+            }
+        }
+    </script>
+
+{% endblock %}

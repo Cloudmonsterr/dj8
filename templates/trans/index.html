@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block con %}
+
+    <form method="post" name = "transForm">
+        {% csrf_token %}
+        <div class="mt-1 col-sm-5">
+            <label class="form-label" ><b>번역할 글을 입력해주세요</b></label>
+        </div>
+        <div class ='mt-1 col-sm-10'>
+            <select name='bt' class ='form-select'>
+                    {% for k,v in d.items %}
+                        <option value="{{k}}" {% if bt == k %} selected {% endif %}>{{v|upper}}</option>
+                    {% endfor %}
+            </select>
+        </div>
+        <div class ='mt-1 col-sm-10'>    
+            <input type="text" style="height: 100px;" name="word" value="{{word}}" class="form-control">
+        </div>
+        <div class="mt-3 col-sm-10">
+            <button class = "btn btn-dark" style="width: 100%;" type="button" onclick="check()">번역</button>
+        </div>
+        <div class=" mt-3 col-sm-5">
+            <label class="form-label" ><b>번역 결과</b></label>
+        </div>
+        <div class ='mt-1 col-sm-10'>
+            <select name='at' class ='form-select'>
+                {% for k,v in d.items %}
+                    <option value="{{k}}" {% if at == k %} selected {% endif %}>{{v|upper}}</option>
+                {% endfor %}
+            </select>
+        <div class="mt-1 col-sm-15">
+            <textarea style="height: 100px;" class="form-control" disabled>{{rt.text}}</textarea>
+    </form>
+
+    <script>
+        function check(){
+            tf = document.transForm;
+            if(!tf.word.value){
+                alert("번역할 텍스트를 입력해주세요");
+            }else if(tf.bt.value == tf.at.value){
+                alert("서로 다른 나라를 선택해주세요");
+            }else{
+                tf.submit();
+            }
+        }
+    </script>
+
+    {% if rt.text %}
+        <from method ='post'>
+            {% csrf_token %}
+            <div class = "text-end mt-4">
+                <input type="hidden" name ='bt' value = "{{at}}">
+                <input type="hidden" name ='at' value = "{{bt}}">
+                <input type="hidden" name ='word' value = "{{rt.text}}">
+                <input type="hidden" name ='rt.text' value = "{{word}}">
+                <button class = "btn btn-outline-dark">바꾸기</button>
+            </div>
+            
+        </from method = 'post' atciton="{% url 'tts:index' %}">
+            {% csrf_token %}
+            <input type="hidden" name="st" value="{{at}}">
+            <input type="hidden" name="lan" value="{{word}}">
+            <input type="text" name="fanme">
+            <button>tts</button>
+        <form>
+
+
+        </form>
+
+    {% endif %}
+
+
+{% endblock %}
